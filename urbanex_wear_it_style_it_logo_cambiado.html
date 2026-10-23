@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBANEX | Wear It, Style It</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0a0a0c',
+                            dark: '#121215',
+                            card: '#1a1a1e',
+                            border: '#2a2a30',
+                            accent: '#ffffff',
+                            muted: '#8e8e93',
+                            highlight: '#ff2d55'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'Inter', 'sans-serif'],
+                        display: ['Syne', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Permanent+Marker&family=Cinzel:wght@700&family=Monoton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbars & canvas overlays */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a42; }
+        body { background-color: #0a0a0c; color: #f3f4f6; overflow-x: hidden; }
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col grid-bg selection:bg-white selection:text-black">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-white text-black text-xs font-bold py-1.5 px-4 text-center tracking-widest uppercase flex justify-between items-center z-50">
+        <span class="hidden md:inline">SEVILLA STREETWEAR REVOLUTION</span>
+        <span>ENVÍOS GRATIS A PARTIR DE 45€ | "WEAR IT, STYLE IT"</span>
+        <span class="hidden md:inline"><i class="fa-solid fa-bolt text-yellow-500 mr-1"></i> EDICIÓN FLEXOGRAFÍA MANGA DERECHA</span>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 bg-brand-black/90 backdrop-blur-md border-b border-brand-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- LOGO BRAND -->
+            <button onclick="switchTab('home')" class="flex items-center space-x-3 group focus:outline-none">
+                <img src="data:image/png;base64,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" alt="Logo URBANEX" class="w-8 h-8 object-contain group-hover:rotate-180 transition-transform duration-700 ease-out">
+                <span class="font-display font-extrabold text-2xl tracking-tighter text-white">URBANEX</span>
+            </button>
+
+            <!-- NAVIGATION LINKS (SPA SWITCHER) -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-medium tracking-wide">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg transition-colors text-white font-bold border-b-2 border-white">INICIO / EDITOR</button>
+                <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-3 py-2 rounded-lg text-brand-muted hover:text-white transition-colors">TIENDA</button>
+                <button onclick="switchTab('about')" id="nav-about" class="nav-btn px-3 py-2 rounded-lg text-brand-muted hover:text-white transition-colors">SOBRE NOSOTROS</button>
+                <button onclick="switchTab('faq')" id="nav-faq" class="nav-btn px-3 py-2 rounded-lg text-brand-muted hover:text-white transition-colors">F&Q</button>
+                <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn px-3 py-2 rounded-lg text-brand-muted hover:text-white transition-colors">CONTACTO</button>
+            </nav>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex items-center space-x-3">
+                <button onclick="switchTab('cart')" class="relative p-2.5 rounded-full bg-brand-card hover:bg-brand-border border border-brand-border text-white transition-all duration-200 focus:outline-none" title="Ver Carrito">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-white text-black font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-lg transform scale-0 transition-transform">0</span>
+                </button>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-brand-card text-white hover:text-gray-300">
+                    <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MOBILE MENU OVERLAY -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-brand-border px-4 pt-2 pb-6 space-y-2">
+            <button onclick="switchTab('home')" class="block w-full text-left px-3 py-2 rounded-md text-white font-semibold">INICIO / EDITOR</button>
+            <button onclick="switchTab('shop')" class="block w-full text-left px-3 py-2 rounded-md text-brand-muted hover:text-white">TIENDA</button>
+            <button onclick="switchTab('about')" class="block w-full text-left px-3 py-2 rounded-md text-brand-muted hover:text-white">SOBRE NOSOTROS</button>
+            <button onclick="switchTab('faq')" class="block w-full text-left px-3 py-2 rounded-md text-brand-muted hover:text-white">F&Q</button>
+            <button onclick="switchTab('contact')" class="block w-full text-left px-3 py-2 rounded-md text-brand-muted hover:text-white">CONTACTO</button>
+        </div>
+    </header>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-white text-black px-5 py-3 rounded-xl shadow-2xl font-semibold flex items-center space-x-3 pointer-events-none">
+        <i id="toast-icon" class="fa-solid fa-check-circle text-green-600 text-lg"></i>
+        <span id="toast-msg">Mensaje de notificación</span>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINERS (SPA SCREENS) -->
+    <main class="flex-grow">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 1: INICIO & 2D CUSTOM EDITOR       -->
+        <!-- ========================================== -->
+        <section id="screen-home" class="spa-screen block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- HERO SLOGAN -->
+            <div class="text-center my-6 space-y-2">
+                <span class="inline-block px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded-full text-xs uppercase tracking-widest font-semibold">
+                    Personalizador 2D Interactivo
+                </span>
+                <h1 class="font-display font-extrabold text-4xl sm:text-6xl md:text-7xl uppercase tracking-tighter text-white">
+                    WEAR IT, <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600">STYLE IT</span>
+                </h1>
+                <p class="text-brand-muted text-sm sm:text-base max-w-xl mx-auto">
+                    Crea tu propia ropa de estilo urbano streetwear. Diseña online en directo, añade tus imágenes, modifica cortes y recibe flexografía premium en Sevilla.
+                </p>
+            </div>
+
+            <!-- EDITOR WORKSPACE GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8">
+                
+                <!-- LEFT TOOLBAR CONTROLS (5 COLS) -->
+                <div class="lg:col-span-5 bg-brand-card border border-brand-border rounded-2xl p-5 space-y-6 shadow-2xl">
+                    
+                    <!-- TAB SELECTOR FOR EDITOR OPTIONS -->
+                    <div class="flex border-b border-brand-border pb-3 space-x-2 text-xs font-bold uppercase tracking-wider overflow-x-auto">
+                        <button onclick="setEditorTab('garment')" id="ed-tab-garment" class="ed-tab-btn flex-1 py-2 px-3 rounded-lg bg-white text-black transition">Prenda & Corte</button>
+                        <button onclick="setEditorTab('text')" id="ed-tab-text" class="ed-tab-btn flex-1 py-2 px-3 rounded-lg bg-brand-dark text-brand-muted hover:text-white transition">Texto</button>
+                        <button onclick="setEditorTab('image')" id="ed-tab-image" class="ed-tab-btn flex-1 py-2 px-3 rounded-lg bg-brand-dark text-brand-muted hover:text-white transition">Imágenes</button>
+                    </div>
+
+                    <!-- SUB-PANEL 1: GARMENT OPTIONS -->
+                    <div id="panel-garment" class="space-y-5">
+                        
+                        <!-- Base Color Picker -->
+                        <div>
+                            <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Color Base de la Prenda</label>
+                            <div class="flex flex-wrap gap-2.5 items-center">
+                                <button onclick="setGarmentColor('#000000')" class="w-8 h-8 rounded-full bg-black border-2 border-white/40 hover:scale-110 transition shadow" title="Negro"></button>
+                                <button onclick="setGarmentColor('#ffffff')" class="w-8 h-8 rounded-full bg-white border-2 border-transparent hover:scale-110 transition shadow" title="Blanco"></button>
+                                <button onclick="setGarmentColor('#2b2e34')" class="w-8 h-8 rounded-full bg-gray-700 border-2 border-transparent hover:scale-110 transition shadow" title="Gris Grafito"></button>
+                                <button onclick="setGarmentColor('#4a3b32')" class="w-8 h-8 rounded-full bg-amber-900 border-2 border-transparent hover:scale-110 transition shadow" title="Marrón Urbano"></button>
+                                <button onclick="setGarmentColor('#23382b')" class="w-8 h-8 rounded-full bg-emerald-900 border-2 border-transparent hover:scale-110 transition shadow" title="Verde Militar"></button>
+                                <button onclick="setGarmentColor('#1a2332')" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-transparent hover:scale-110 transition shadow" title="Azul Noche"></button>
+                                <input type="color" id="custom-color-picker" onchange="setGarmentColor(this.value)" class="w-8 h-8 rounded-full cursor-pointer bg-transparent border-0" title="Color Personalizado">
+                            </div>
+                        </div>
+
+                        <!-- Cut Type -->
+                        <div>
+                            <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Tipo de Corte</label>
+                            <select id="select-cut" onchange="updateGarmentShape()" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-white">
+                                <option value="oversize">Oversize Heavy Weight (Estilo Bershka Boxy)</option>
+                                <option value="regular">Regular Fit Clásico</option>
+                                <option value="crop">Crop Top / Cropped Streetwear</option>
+                                <option value="slim">Slim Fit Ajustado</option>
+                                <option value="muscle">Muscle Fit / Tank Top</option>
+                            </select>
+                        </div>
+
+                        <!-- Neckline Style -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Cuello</label>
+                                <select id="select-neck" onchange="updateGarmentShape()" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="round">Redondo Redondo (Rib 2cm)</option>
+                                    <option value="vneck">Cuello V Urbano</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Talla</label>
+                                <select id="select-size" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="S">S - Small</option>
+                                    <option value="M" selected>M - Medium</option>
+                                    <option value="L">L - Large</option>
+                                    <option value="XL">XL - Oversized Fit</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Signature Right Sleeve Flexography Option -->
+                        <div class="bg-brand-dark p-3.5 rounded-xl border border-brand-border flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-white uppercase flex items-center gap-1.5">
+                                    <i class="fa-solid fa-star text-xs text-yellow-400"></i> Logo Manga Derecha URBANEX
+                                </p>
+                                <p class="text-[11px] text-brand-muted">Flexografía blanca de alta densidad en manga</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="check-sleeve-logo" checked onchange="toggleSleeveLogo()" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 2: TEXT TOOL -->
+                    <div id="panel-text" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Texto Personalizado</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="input-text-val" placeholder="Escribe tu frase o marca..." value="URBANEX" class="flex-1 bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-white">
+                                <button onclick="addTextToCanvas()" class="px-4 py-2 bg-white text-black font-bold text-xs rounded-xl hover:bg-gray-200 uppercase tracking-wider">Añadir</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Tipografía</label>
+                                <select id="select-font" onchange="updateSelectedTextProp('font')" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="Space Grotesk">Space Grotesk (Moderna)</option>
+                                    <option value="Syne">Syne (Bold Streetwear)</option>
+                                    <option value="Permanent Marker">Graffiti / Marker</option>
+                                    <option value="Monoton">Retro Synthwave</option>
+                                    <option value="Cinzel">Gothic Editorial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Color Texto</label>
+                                <input type="color" id="text-color-picker" value="#ffffff" onchange="updateSelectedTextProp('color')" class="w-full h-9 bg-brand-dark border border-brand-border rounded-xl p-1 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 3: IMAGE UPLOAD -->
+                    <div id="panel-image" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Subir Imagen / Arte Propio</label>
+                            <label class="border-2 border-dashed border-brand-border hover:border-white rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer bg-brand-dark/50 transition">
+                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-brand-muted mb-2"></i>
+                                <span class="text-xs text-brand-muted font-medium">Haz clic o arrastra tu archivo PNG/JPG</span>
+                                <span class="text-[10px] text-gray-500 mt-1">Recomendado: Fondo transparente</span>
+                                <input type="file" id="upload-img-input" accept="image/*" onchange="handleImageUpload(event)" class="hidden">
+                            </label>
+                        </div>
+
+                        <!-- Sample Stickers -->
+                        <div>
+                            <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider mb-2">Graphes & Stickers De la Marca</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="addPresetSticker('star')" class="p-2 bg-brand-dark border border-brand-border rounded-lg hover:bg-brand-border flex items-center justify-center text-white" title="Estrella Urbanex">
+                                    <i class="fa-solid fa-star text-lg"></i>
+                                </button>
+                                <button onclick="addPresetSticker('barcode')" class="p-2 bg-brand-dark border border-brand-border rounded-lg hover:bg-brand-border flex items-center justify-center text-white" title="Código de barras">
+                                    <i class="fa-solid fa-barcode text-lg"></i>
+                                </button>
+                                <button onclick="addPresetSticker('fire')" class="p-2 bg-brand-dark border border-brand-border rounded-lg hover:bg-brand-border flex items-center justify-center text-white" title="Fuego">
+                                    <i class="fa-solid fa-fire text-lg"></i>
+                                </button>
+                                <button onclick="addPresetSticker('smile')" class="p-2 bg-brand-dark border border-brand-border rounded-lg hover:bg-brand-border flex items-center justify-center text-white" title="Smile Acid">
+                                    <i class="fa-regular fa-face-smile text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SELECTED ELEMENT TRANSFORMATIONS & ACTIONS -->
+                    <div id="selection-controls" class="border-t border-brand-border pt-4 space-y-3">
+                        <label class="block text-xs uppercase text-brand-muted font-bold tracking-wider">Ajustes del Objeto Seleccionado</label>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-brand-muted w-16">Tamaño</span>
+                            <input type="range" id="slider-scale" min="0.3" max="3" step="0.1" value="1" oninput="scaleSelectedObject(this.value)" class="w-full accent-white">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-brand-muted w-16">Rotación</span>
+                            <input type="range" id="slider-rotate" min="-180" max="180" step="5" value="0" oninput="rotateSelectedObject(this.value)" class="w-full accent-white">
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <button onclick="deleteSelectedObject()" class="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 font-semibold">
+                                <i class="fa-solid fa-trash-can"></i> Eliminar Objeto
+                            </button>
+                            <button onclick="clearCanvas()" class="text-xs text-brand-muted hover:text-white">Limpiar Todo</button>
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT CUSTOM ITEM TO CART -->
+                    <div class="border-t border-brand-border pt-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <span class="text-xs text-brand-muted block">Precio Final Prenda</span>
+                                <span class="text-2xl font-black text-white" id="custom-price">29,99 €</span>
+                            </div>
+                            <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-bold">Flexografía Incluida</span>
+                        </div>
+                        <button onclick="addCustomToCart()" class="w-full py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-200 transition-all transform active:scale-98 shadow-xl flex items-center justify-center space-x-2 uppercase tracking-wider text-sm">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <span>Añadir Mi Diseño Al Carrito</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT INTERACTIVE CANVAS PREVIEW (7 COLS) -->
+                <div class="lg:col-span-7 bg-brand-card border border-brand-border rounded-2xl p-4 sm:p-8 flex flex-col items-center justify-center relative shadow-2xl min-h-[500px] overflow-hidden">
+                    
+                    <!-- Top Canvas Instructions Banner -->
+                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none z-10">
+                        <span class="text-[11px] bg-brand-dark/80 backdrop-blur px-3 py-1 rounded-full border border-brand-border text-brand-muted">
+                            <i class="fa-solid fa-hand-pointer mr-1"></i> Arrastra y modifica los elementos en vivo
+                        </span>
+                        <span id="canvas-status" class="text-[11px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-semibold">
+                            Canvas 2D Activo
+                        </span>
+                    </div>
+
+                    <!-- PREVIEW CONTAINER & CANVAS CANVAS -->
+                    <div class="relative w-full max-w-[420px] aspect-[4/5] flex items-center justify-center my-auto">
+                        
+                        <!-- SVG Garment Vector Background -->
+                        <svg id="svg-garment" class="w-full h-full drop-shadow-2xl transition-all duration-300" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Main Garment Silhouette Path (Updated dynamically by JS) -->
+                            <path id="path-body" d="M150 100 Q 250 140 350 100 L 440 180 L 390 250 L 350 220 L 350 540 L 150 540 L 150 220 L 110 250 L 60 180 Z" fill="#000000" stroke="#2a2a30" stroke-width="3"/>
+                            
+                            <!-- Neck Outline -->
+                            <path id="path-neck" d="M 190 105 Q 250 150 310 105" fill="none" stroke="#2a2a30" stroke-width="4"/>
+                            
+                            <!-- Right Sleeve Flexography Logo Graphic -->
+                            <g id="group-sleeve-logo" transform="translate(385, 185) scale(0.25)">
+                                <image href="data:image/png;base64,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" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid meet" />
+                                <text x="50" y="120" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold" font-family="Space Grotesk">URBANEX</text>
+                            </g>
+                        </svg>
+
+                        <!-- Interactive Printing Printable Area Overlay Canvas -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <canvas id="interactive-canvas" width="220" height="280" class="border border-dashed border-white/20 rounded-lg cursor-crosshair shadow-inner"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Canvas Disclaimer -->
+                    <p class="text-[11px] text-brand-muted mt-4 text-center">
+                        Área delimitada de impresión flexográfica de alta definición. Las prendas físicas utilizan algodón 100% orgánico 240 GSM.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: CATALOG / SHOP                  -->
+        <!-- ========================================== -->
+        <section id="screen-shop" class="spa-screen hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-brand-border gap-4">
+                <div>
+                    <h2 class="font-display text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-white">CATÁLOGO DE COLECCIÓN</h2>
+                    <p class="text-brand-muted text-sm mt-1">Prendas de alta calidad creadas en Sevilla. Diseños urbanos exclusivos.</p>
+                </div>
+                
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterShop('all')" class="shop-filter-btn px-4 py-2 bg-white text-black font-bold text-xs rounded-xl uppercase">Todos</button>
+                    <button onclick="filterShop('camisetas')" class="shop-filter-btn px-4 py-2 bg-brand-card text-brand-muted hover:text-white font-bold text-xs rounded-xl uppercase border border-brand-border">Camisetas</button>
+                    <button onclick="filterShop('sudaderas')" class="shop-filter-btn px-4 py-2 bg-brand-card text-brand-muted hover:text-white font-bold text-xs rounded-xl uppercase border border-brand-border">Sudaderas</button>
+                    <button onclick="filterShop('pantalones')" class="shop-filter-btn px-4 py-2 bg-brand-card text-brand-muted hover:text-white font-bold text-xs rounded-xl uppercase border border-brand-border">Pantalones</button>
+                </div>
+            </div>
+
+            <!-- PRODUCT GRID -->
+            <div id="shop-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Products injected dynamically by JavaScript -->
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: SOBRE NOSOTROS (ABOUT BRAND)    -->
+        <!-- ========================================== -->
+        <section id="screen-about" class="spa-screen hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+            
+            <div class="text-center space-y-4">
+                <span class="px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded-full text-xs font-bold uppercase tracking-widest">Nuestra Historia</span>
+                <h2 class="font-display text-4xl sm:text-6xl font-extrabold uppercase text-white tracking-tight">NACIDOS EN SEVILLA</h2>
+                <p class="text-brand-muted text-base max-w-2xl mx-auto">
+                    URBANEX nace para revolucionar el streetwear juvenil de 15 a 25 años. Moda urbana low-cost de calidad premium sin comprometer el planeta.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-white text-black flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-shirt"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white uppercase">Flexografía & Manga Derecha</h3>
+                    <p class="text-sm text-brand-muted">
+                        Nuestro sello inconfundible. Cada camiseta y sudadera incorpora el logo vectorial de la estrella de 4 puntas en la manga derecha con estampado de flexografía táctil de alta densidad.
+                    </p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-white text-black flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white uppercase">Moda Sostenible Low-Cost</h3>
+                    <p class="text-sm text-brand-muted">
+                        Trabajamos únicamente con tejido 100% algodón orgánico certificado. Fabricamos bajo demanda mediante el editor 2D para eliminar la sobreproducción y mantener precios accesibles.
+                    </p>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-white text-black flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white uppercase">Personalización Total</h3>
+                    <p class="text-sm text-brand-muted">
+                        Un cliente no es un simple comprador, es el diseñador. Modifica tipos de corte (Cropped, Oversize, Slim), cuellos y estampados en tiempo real.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Banner quote -->
+            <div class="bg-gradient-to-r from-brand-card via-brand-dark to-brand-card border border-brand-border rounded-2xl p-8 text-center space-y-3">
+                <p class="font-display text-2xl md:text-3xl font-extrabold uppercase text-white">"WEAR IT, STYLE IT"</p>
+                <p class="text-brand-muted text-sm max-w-xl mx-auto">La calle no sigue normas estipuladas. Diseña la prenda que realmente te representa con la mejor tecnología de personalización en España.</p>
+            </div>
+
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: FAQ (PREGUNTAS FRECUENTES)      -->
+        <!-- ========================================== -->
+        <section id="screen-faq" class="spa-screen hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center mb-10 space-y-2">
+                <h2 class="font-display text-4xl font-extrabold uppercase text-white">PREGUNTAS FRECUENTES</h2>
+                <p class="text-brand-muted text-sm">Resuelve tus dudas sobre el personalizador, envíos y acabados de flexografía.</p>
+            </div>
+
+            <div class="space-y-4" id="faq-accordion">
+                
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full text-left p-5 flex justify-between items-center text-white font-bold text-base focus:outline-none">
+                        <span>¿Cómo funciona el personalizador 2D de ropa?</span>
+                        <i class="fa-solid fa-chevron-down transition-transform" id="faq-icon-1"></i>
+                    </button>
+                    <div id="faq-ans-1" class="hidden px-5 pb-5 text-sm text-brand-muted border-t border-brand-border/50 pt-3">
+                        Puedes seleccionar la prenda base, modificar el color, cambiar el tipo de corte (Oversize, Cropped, Slim Fit, etc.), escribir textos con fuentes exclusivas o subir tus propios archivos PNG. Todo lo que ves en el lienzo canvas interactivo se estampa exactamente igual mediante flexografía digital.
+                    </div>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full text-left p-5 flex justify-between items-center text-white font-bold text-base focus:outline-none">
+                        <span>¿Qué es la flexografía de la manga derecha?</span>
+                        <i class="fa-solid fa-chevron-down transition-transform" id="faq-icon-2"></i>
+                    </button>
+                    <div id="faq-ans-2" class="hidden px-5 pb-5 text-sm text-brand-muted border-t border-brand-border/50 pt-3">
+                        Es el sello distintivo de URBANEX. Aplicamos un vinilo texturizado en relieve con la estrella icónica en la manga derecha de todas las prendas, garantizando resistencia superior a 50 lavados sin agrietarse.
+                    </div>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(3)" class="w-full text-left p-5 flex justify-between items-center text-white font-bold text-base focus:outline-none">
+                        <span>¿Cuánto tardan los envíos desde Sevilla?</span>
+                        <i class="fa-solid fa-chevron-down transition-transform" id="faq-icon-3"></i>
+                    </button>
+                    <div id="faq-ans-3" class="hidden px-5 pb-5 text-sm text-brand-muted border-t border-brand-border/50 pt-3">
+                        Para la Península Ibérica el tiempo de preparación e impresión es de 24-48h. Recibes tu pedido personalizado en un plazo de 2 a 4 días laborables. Los envíos son gratuitos en compras superiores a 45€.
+                    </div>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(4)" class="w-full text-left p-5 flex justify-between items-center text-white font-bold text-base focus:outline-none">
+                        <span>¿Puedo devolver una prenda personalizada?</span>
+                        <i class="fa-solid fa-chevron-down transition-transform" id="faq-icon-4"></i>
+                    </button>
+                    <div id="faq-ans-4" class="hidden px-5 pb-5 text-sm text-brand-muted border-t border-brand-border/50 pt-3">
+                        Al tratarse de artículos creados bajo demanda con tu propio diseño o corte específico, solo se aceptan devoluciones por taras de fabricación o defecto en la impresión. Revisa siempre la guía de tallas antes de confirmar.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: CONTACT                         -->
+        <!-- ========================================== -->
+        <section id="screen-contact" class="spa-screen hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                
+                <div class="space-y-6">
+                    <div>
+                        <span class="px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded-full text-xs font-bold uppercase tracking-widest">Contacto Directo</span>
+                        <h2 class="font-display text-4xl font-extrabold uppercase text-white mt-2">¿HABLAMOS?</h2>
+                        <p class="text-brand-muted text-sm mt-2">¿Tienes alguna duda sobre tu diseño o quieres hacer un pedido al por mayor para tu marca o colectivo?</p>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="flex items-center space-x-3 bg-brand-card border border-brand-border p-4 rounded-xl">
+                            <i class="fa-solid fa-location-dot text-white text-lg"></i>
+                            <div>
+                                <p class="text-white font-bold">HQ Sevilla</p>
+                                <p class="text-brand-muted text-xs">Calle Sierpes / Centro Urbano, Sevilla, España</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 bg-brand-card border border-brand-border p-4 rounded-xl">
+                            <i class="fa-solid fa-envelope text-white text-lg"></i>
+                            <div>
+                                <p class="text-white font-bold">Email de soporte</p>
+                                <p class="text-brand-muted text-xs">info@urbanex-streetwear.es</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 bg-brand-card border border-brand-border p-4 rounded-xl">
+                            <i class="fa-brands fa-instagram text-white text-lg"></i>
+                            <div>
+                                <p class="text-white font-bold">Instagram Oficial</p>
+                                <p class="text-brand-muted text-xs">@urbanex_oficial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <form onsubmit="handleContactSubmit(event)" class="bg-brand-card border border-brand-border rounded-2xl p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-brand-muted mb-1">Nombre Completo</label>
+                        <input type="text" required placeholder="Tu nombre..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-brand-muted mb-1">Correo Electrónico</label>
+                        <input type="email" required placeholder="tu@email.com" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-brand-muted mb-1">Mensaje o Consulta</label>
+                        <textarea rows="4" required placeholder="Escribe tu mensaje aquí..." class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-white text-black font-extrabold text-sm uppercase tracking-wider rounded-xl hover:bg-gray-200 transition">
+                        Enviar Mensaje
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: CART / SHOPPING BAG             -->
+        <!-- ========================================== -->
+        <section id="screen-cart" class="spa-screen hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex justify-between items-center mb-8 pb-4 border-b border-brand-border">
+                <h2 class="font-display text-3xl font-extrabold uppercase text-white flex items-center gap-3">
+                    <i class="fa-solid fa-bag-shopping"></i> MI CARRITO DE COMPRA
+                </h2>
+                <button onclick="switchTab('shop')" class="text-xs text-brand-muted hover:text-white flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Seguir Comprando
+                </button>
+            </div>
+
+            <!-- Cart Items List Container -->
+            <div id="cart-container" class="space-y-4">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Cart Summary Box -->
+            <div id="cart-summary" class="mt-8 bg-brand-card border border-brand-border rounded-2xl p-6 hidden">
+                <div class="space-y-3 border-b border-brand-border pb-4 text-sm">
+                    <div class="flex justify-between text-brand-muted">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal" class="text-white font-medium">0.00 €</span>
+                    </div>
+                    <div class="flex justify-between text-brand-muted">
+                        <span>Envío Express (Sevilla & Península)</span>
+                        <span id="cart-shipping" class="text-emerald-400 font-medium">GRATIS</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center py-4 text-lg font-bold">
+                    <span class="text-white">TOTAL</span>
+                    <span id="cart-total" class="text-2xl text-white">0.00 €</span>
+                </div>
+
+                <button onclick="checkoutMock()" class="w-full py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-200 transition uppercase tracking-wider text-sm flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-lock text-xs"></i>
+                    <span>Finalizar Pedido Seguro</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-dark border-t border-brand-border py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
+            
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <img src="data:image/png;base64,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" alt="Logo URBANEX" class="w-6 h-6 object-contain">
+                    <span class="font-display font-extrabold text-xl text-white tracking-tighter">URBANEX</span>
+                </div>
+                <p class="text-brand-muted text-xs leading-relaxed">
+                    Marca de moda streetwear nacida en Sevilla. Diseños personalizados mediante flexografía digital y algodón sostenible.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white uppercase text-xs tracking-wider mb-3">Navegación</h4>
+                <ul class="space-y-2 text-xs text-brand-muted">
+                    <li><button onclick="switchTab('home')" class="hover:text-white">Editor 2D</button></li>
+                    <li><button onclick="switchTab('shop')" class="hover:text-white">Catálogo Tienda</button></li>
+                    <li><button onclick="switchTab('about')" class="hover:text-white">Sobre Nosotros</button></li>
+                    <li><button onclick="switchTab('faq')" class="hover:text-white">Preguntas Frecuentes</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white uppercase text-xs tracking-wider mb-3">Cortes Especiales</h4>
+                <ul class="space-y-2 text-xs text-brand-muted">
+                    <li><a href="#" onclick="switchTab('home')" class="hover:text-white">Oversized Boxy Fit</a></li>
+                    <li><a href="#" onclick="switchTab('home')" class="hover:text-white">Cropped Streetwear</a></li>
+                    <li><a href="#" onclick="switchTab('home')" class="hover:text-white">Slim Fit Urban</a></li>
+                    <li><a href="#" onclick="switchTab('home')" class="hover:text-white">Flexografía Manga Derecha</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white uppercase text-xs tracking-wider mb-3">Síguenos</h4>
+                <div class="flex space-x-4 text-brand-muted text-lg">
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+                <p class="text-[11px] text-brand-muted mt-4">© 2026 URBANEX Sevilla. "WEAR IT, STYLE IT".</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        /* ============================================================= */
+        /* GLOBAL APP STATE & DATA STORES                                */
+        /* ============================================================= */
+        const state = {
+            currentTab: 'home',
+            cart: [],
+            shopProducts: [
+                { id: 1, name: 'Camiseta Heavy Weight Oversize', category: 'camisetas', price: 29.99, image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80', desc: 'Algodón 240 GSM con logo flexografía en manga derecha.' },
+                { id: 2, name: 'Sudadera Hoodie Dark Star', category: 'sudaderas', price: 49.99, image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80', desc: 'Sudadera capucha oversize con felpa perchada interior.' },
+                { id: 3, name: 'Pantalón Cargo Wide Fit', category: 'pantalones', price: 44.99, image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=800&q=80', desc: 'Bolsillos laterales tácticos con ajuste de tobillo.' },
+                { id: 4, name: 'Camiseta Cropped Boxy Cut', category: 'camisetas', price: 24.99, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80', desc: 'Corte crop streetwear con bajo sin rematar.' },
+                { id: 5, name: 'Sudadera Crewneck Sevilla Retro', category: 'sudaderas', price: 42.99, image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80', desc: 'Sudadera cuello redondo sin capucha estilo vintage.' },
+                { id: 6, name: 'Pantalón Jogger Minimal Dark', category: 'pantalones', price: 39.99, image: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=800&q=80', desc: 'Jogger holgado de algodón orgánico super suave.' }
+            ],
+            garment: {
+                color: '#000000',
+                cut: 'oversize',
+                neck: 'round',
+                size: 'M',
+                sleeveLogo: true
+            },
+            canvasObjects: [], // Objects added to garment printing canvas
+            selectedObjectIndex: -1,
+            isDragging: false,
+            dragOffset: { x: 0, y: 0 }
+        };
+
+        let canvas, ctx;
+
+        /* ============================================================= */
+        /* INITIALIZATION ON WINDOW LOAD                                 */
+        /* ============================================================= */
+        window.onload = function() {
+            initCanvas();
+            renderShop();
+            renderCart();
+            // Default element in canvas
+            addTextToCanvas("URBANEX");
+        };
+
+        /* ============================================================= */
+        /* ROUTING & SPA NAVIGATION SYSTEM                               */
+        /* ============================================================= */
+        function switchTab(tabId) {
+            state.currentTab = tabId;
+
+            // Hide all screens
+            document.querySelectorAll('.spa-screen').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+
+            // Show target screen
+            const target = document.getElementById(`screen-${tabId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            // Update active navbar states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'font-bold', 'border-b-2', 'border-white');
+                btn.classList.add('text-brand-muted');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-brand-muted');
+                activeBtn.classList.add('text-white', 'font-bold', 'border-b-2', 'border-white');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Redraw canvas if switching to home
+            if (tabId === 'home') {
+                setTimeout(drawCanvas, 50);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* ============================================================= */
+        /* 2D CANVAS INTERACTIVE EDITOR SYSTEM                           */
+        /* ============================================================= */
+        function initCanvas() {
+            canvas = document.getElementById('interactive-canvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+
+            // Attach Mouse Events
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+
+            // Attach Touch Events for Mobile
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            canvas.addEventListener('touchend', handleMouseUp);
+
+            drawCanvas();
+        }
+
+        function setEditorTab(tab) {
+            ['garment', 'text', 'image'].forEach(t => {
+                document.getElementById(`panel-${t}`).classList.add('hidden');
+                document.getElementById(`ed-tab-${t}`).classList.remove('bg-white', 'text-black');
+                document.getElementById(`ed-tab-${t}`).classList.add('bg-brand-dark', 'text-brand-muted');
+            });
+
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+            document.getElementById(`ed-tab-${tab}`).classList.add('bg-white', 'text-black');
+            document.getElementById(`ed-tab-${tab}`).classList.remove('bg-brand-dark', 'text-brand-muted');
+        }
+
+        function setGarmentColor(color) {
+            state.garment.color = color;
+            document.getElementById('path-body').setAttribute('fill', color);
+            
+            // Contrast border for black/dark garments
+            if (color === '#000000' || color === '#121215') {
+                document.getElementById('path-body').setAttribute('stroke', '#3a3a42');
+            } else {
+                document.getElementById('path-body').setAttribute('stroke', '#1a1a1e');
+            }
+        }
+
+        function updateGarmentShape() {
+            const cut = document.getElementById('select-cut').value;
+            const neck = document.getElementById('select-neck').value;
+            state.garment.cut = cut;
+            state.garment.neck = neck;
+
+            const pathBody = document.getElementById('path-body');
+            const pathNeck = document.getElementById('path-neck');
+
+            // Dynamic SVG Path morphing based on cut selection
+            if (cut === 'oversize') {
+                pathBody.setAttribute('d', 'M130 90 Q 250 130 370 90 L 460 170 L 400 250 L 360 220 L 360 550 L 140 550 L 140 220 L 100 250 L 40 170 Z');
+            } else if (cut === 'crop') {
+                pathBody.setAttribute('d', 'M150 100 Q 250 140 350 100 L 440 180 L 390 250 L 350 220 L 350 380 L 150 380 L 150 220 L 110 250 L 60 180 Z');
+            } else if (cut === 'slim') {
+                pathBody.setAttribute('d', 'M160 100 Q 250 135 340 100 L 420 170 L 380 230 L 340 210 L 330 530 L 170 530 L 160 210 L 120 230 L 80 170 Z');
+            } else if (cut === 'muscle') {
+                pathBody.setAttribute('d', 'M180 100 Q 250 135 320 100 L 350 160 L 330 210 L 330 530 L 170 530 L 170 210 L 150 160 Z');
+            } else { // Regular
+                pathBody.setAttribute('d', 'M150 100 Q 250 140 350 100 L 440 180 L 390 250 L 350 220 L 350 540 L 150 540 L 150 220 L 110 250 L 60 180 Z');
+            }
+
+            // Neck morph
+            if (neck === 'vneck') {
+                pathNeck.setAttribute('d', 'M 190 105 L 250 170 L 310 105');
+            } else {
+                pathNeck.setAttribute('d', 'M 190 105 Q 250 150 310 105');
+            }
+        }
+
+        function toggleSleeveLogo() {
+            const check = document.getElementById('check-sleeve-logo').checked;
+            state.garment.sleeveLogo = check;
+            document.getElementById('group-sleeve-logo').style.display = check ? 'block' : 'none';
+        }
+
+        /* CANVAS ELEMENT LOGIC & RENDERING */
+        function addTextToCanvas(customVal) {
+            const val = customVal || document.getElementById('input-text-val').value;
+            if (!val.trim()) return;
+
+            const font = document.getElementById('select-font').value;
+            const color = document.getElementById('text-color-picker').value;
+
+            state.canvasObjects.push({
+                type: 'text',
+                text: val,
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                fontSize: 26,
+                fontFamily: font,
+                color: color,
+                scale: 1,
+                rotation: 0
+            });
+
+            state.selectedObjectIndex = state.canvasObjects.length - 1;
+            drawCanvas();
+            showToast('Texto añadido a la prenda');
+        }
+
+        function addPresetSticker(type) {
+            let stickerIcon = '★';
+            if (type === 'barcode') stickerIcon = '║▌║█║▌│║▌║';
+            if (type === 'fire') stickerIcon = '🔥';
+            if (type === 'smile') stickerIcon = '☻';
+
+            state.canvasObjects.push({
+                type: 'text',
+                text: stickerIcon,
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                fontSize: 36,
+                fontFamily: 'Space Grotesk',
+                color: '#ffffff',
+                scale: 1,
+                rotation: 0
+            });
+
+            state.selectedObjectIndex = state.canvasObjects.length - 1;
+            drawCanvas();
+            showToast('Sticker añadido');
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    state.canvasObjects.push({
+                        type: 'image',
+                        img: img,
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        width: 80,
+                        height: (80 * img.height) / img.width,
+                        scale: 1,
+                        rotation: 0
+                    });
+                    state.selectedObjectIndex = state.canvasObjects.length - 1;
+                    drawCanvas();
+                    showToast('Imagen cargada al lienzo');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function drawCanvas() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            state.canvasObjects.forEach((obj, idx) => {
+                ctx.save();
+                ctx.translate(obj.x, obj.y);
+                ctx.rotate((obj.rotation * Math.PI) / 180);
+                ctx.scale(obj.scale, obj.scale);
+
+                if (obj.type === 'text') {
+                    ctx.font = `bold ${obj.fontSize}px "${obj.fontFamily}"`;
+                    ctx.fillStyle = obj.color;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(obj.text, 0, 0);
+
+                    // Selection Box indicator
+                    if (idx === state.selectedObjectIndex) {
+                        const metrics = ctx.measureText(obj.text);
+                        const w = metrics.width + 12;
+                        const h = obj.fontSize + 8;
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 1.5;
+                        ctx.setLineDash([4, 4]);
+                        ctx.strokeRect(-w / 2, -h / 2, w, h);
+                    }
+                } else if (obj.type === 'image') {
+                    ctx.drawImage(obj.img, -obj.width / 2, -obj.height / 2, obj.width, obj.height);
+
+                    if (idx === state.selectedObjectIndex) {
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 1.5;
+                        ctx.setLineDash([4, 4]);
+                        ctx.strokeRect(-obj.width / 2 - 4, -obj.height / 2 - 4, obj.width + 8, obj.height + 8);
+                    }
+                }
+
+                ctx.restore();
+            });
+        }
+
+        /* DRAG AND DROP & INTERACTIONS */
+        function getCanvasCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handleMouseDown(e) {
+            const pos = getCanvasCoords(e);
+            let found = false;
+
+            // Check collision backwards (top elements first)
+            for (let i = state.canvasObjects.length - 1; i >= 0; i--) {
+                const obj = state.canvasObjects[i];
+                const dx = pos.x - obj.x;
+                const dy = pos.y - obj.y;
+
+                if (Math.abs(dx) < 40 && Math.abs(dy) < 30) {
+                    state.selectedObjectIndex = i;
+                    state.isDragging = true;
+                    state.dragOffset = { x: dx, y: dy };
+                    found = true;
+                    syncSliders();
+                    break;
+                }
+            }
+
+            if (!found) {
+                state.selectedObjectIndex = -1;
+            }
+            drawCanvas();
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            handleMouseDown(e);
+        }
+
+        function handleMouseMove(e) {
+            if (!state.isDragging || state.selectedObjectIndex === -1) return;
+            const pos = getCanvasCoords(e);
+            const obj = state.canvasObjects[state.selectedObjectIndex];
+            obj.x = pos.x - state.dragOffset.x;
+            obj.y = pos.y - state.dragOffset.y;
+            drawCanvas();
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            handleMouseMove(e);
+        }
+
+        function handleMouseUp() {
+            state.isDragging = false;
+        }
+
+        function scaleSelectedObject(val) {
+            if (state.selectedObjectIndex >= 0) {
+                state.canvasObjects[state.selectedObjectIndex].scale = parseFloat(val);
+                drawCanvas();
+            }
+        }
+
+        function rotateSelectedObject(val) {
+            if (state.selectedObjectIndex >= 0) {
+                state.canvasObjects[state.selectedObjectIndex].rotation = parseInt(val);
+                drawCanvas();
+            }
+        }
+
+        function updateSelectedTextProp(prop) {
+            if (state.selectedObjectIndex < 0) return;
+            const obj = state.canvasObjects[state.selectedObjectIndex];
+            if (obj.type !== 'text') return;
+
+            if (prop === 'font') {
+                obj.fontFamily = document.getElementById('select-font').value;
+            } else if (prop === 'color') {
+                obj.color = document.getElementById('text-color-picker').value;
+            }
+            drawCanvas();
+        }
+
+        function syncSliders() {
+            if (state.selectedObjectIndex >= 0) {
+                const obj = state.canvasObjects[state.selectedObjectIndex];
+                document.getElementById('slider-scale').value = obj.scale;
+                document.getElementById('slider-rotate').value = obj.rotation;
+            }
+        }
+
+        function deleteSelectedObject() {
+            if (state.selectedObjectIndex >= 0) {
+                state.canvasObjects.splice(state.selectedObjectIndex, 1);
+                state.selectedObjectIndex = -1;
+                drawCanvas();
+                showToast('Objeto eliminado');
+            }
+        }
+
+        function clearCanvas() {
+            state.canvasObjects = [];
+            state.selectedObjectIndex = -1;
+            drawCanvas();
+            showToast('Lienzo limpiado');
+        }
+
+        /* ============================================================= */
+        /* CART & SHOPPING BAG SYSTEM                                    */
+        /* ============================================================= */
+        function addCustomToCart() {
+            // Snapshot canvas
+            const canvasData = canvas.toDataURL('image/png');
+            const size = document.getElementById('select-size').value;
+            const cutName = document.getElementById('select-cut').options[document.getElementById('select-cut').selectedIndex].text;
+
+            const customItem = {
+                id: 'custom-' + Date.now(),
+                name: `Camiseta Personalizada (${size})`,
+                subtitle: cutName,
+                price: 29.99,
+                image: canvasData,
+                color: state.garment.color,
+                qty: 1
+            };
+
+            state.cart.push(customItem);
+            updateCartBadge();
+            renderCart();
+            showToast('¡Diseño añadido al carrito!');
+        }
+
+        function addProductToCart(productId) {
+            const prod = state.shopProducts.find(p => p.id === productId);
+            if (!prod) return;
+
+            const existing = state.cart.find(c => c.id === prod.id);
+            if (existing) {
+                existing.qty++;
+            } else {
+                state.cart.push({
+                    id: prod.id,
+                    name: prod.name,
+                    subtitle: 'Colección Oficial',
+                    price: prod.price,
+                    image: prod.image,
+                    qty: 1
+                });
+            }
+
+            updateCartBadge();
+            renderCart();
+            showToast(`${prod.name} añadido`);
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-container');
+            const summary = document.getElementById('cart-summary');
+            if (!container) return;
+
+            if (state.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 bg-brand-card border border-brand-border rounded-2xl p-8 space-y-4">
+                        <i class="fa-solid fa-bag-shopping text-5xl text-brand-muted"></i>
+                        <p class="text-white font-bold text-lg">Tu carrito está vacío</p>
+                        <p class="text-xs text-brand-muted max-w-sm mx-auto">Explora nuestro catálogo o crea tu propio diseño exclusivo en el personalizador 2D.</p>
+                        <button onclick="switchTab('home')" class="px-6 py-3 bg-white text-black font-extrabold text-xs uppercase rounded-xl hover:bg-gray-200 inline-block">Personalizar Ahora</button>
+                    </div>
+                `;
+                summary.classList.add('hidden');
+                return;
+            }
+
+            summary.classList.remove('hidden');
+            let html = '';
+            let subtotal = 0;
+
+            state.cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+
+                html += `
+                    <div class="bg-brand-card border border-brand-border rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-4 w-full sm:w-auto">
+                            <div class="w-20 h-20 bg-brand-dark rounded-lg overflow-hidden border border-brand-border flex-shrink-0 flex items-center justify-center p-1">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain">
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">${item.name}</h4>
+                                <p class="text-xs text-brand-muted">${item.subtitle}</p>
+                                <p class="text-sm font-extrabold text-white mt-1">${item.price.toFixed(2)} €</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between w-full sm:w-auto sm:space-x-6 border-t sm:border-t-0 border-brand-border pt-3 sm:pt-0">
+                            <!-- Qty buttons -->
+                            <div class="flex items-center space-x-2 bg-brand-dark border border-brand-border rounded-lg px-2 py-1">
+                                <button onclick="changeCartQty(${index}, -1)" class="text-brand-muted hover:text-white px-2 font-bold">-</button>
+                                <span class="text-xs text-white font-bold px-2">${item.qty}</span>
+                                <button onclick="changeCartQty(${index}, 1)" class="text-brand-muted hover:text-white px-2 font-bold">+</button>
+                            </div>
+
+                            <div class="text-right">
+                                <span class="text-base font-bold text-white">${itemTotal.toFixed(2)} €</span>
+                                <button onclick="removeCartItem(${index})" class="block text-xs text-red-400 hover:text-red-300 mt-1">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('cart-subtotal').innerText = `${subtotal.toFixed(2)} €`;
+            document.getElementById('cart-total').innerText = `${subtotal.toFixed(2)} €`;
+        }
+
+        function changeCartQty(index, delta) {
+            if (state.cart[index]) {
+                state.cart[index].qty += delta;
+                if (state.cart[index].qty <= 0) {
+                    state.cart.splice(index, 1);
+                }
+                updateCartBadge();
+                renderCart();
+            }
+        }
+
+        function removeCartItem(index) {
+            state.cart.splice(index, 1);
+            updateCartBadge();
+            renderCart();
+            showToast('Producto eliminado');
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalCount = state.cart.reduce((acc, item) => acc + item.qty, 0);
+            badge.innerText = totalCount;
+            if (totalCount > 0) {
+                badge.classList.remove('scale-0');
+                badge.classList.add('scale-100');
+            } else {
+                badge.classList.remove('scale-100');
+                badge.classList.add('scale-0');
+            }
+        }
+
+        function checkoutMock() {
+            if (state.cart.length === 0) return;
+            alert('¡Gracias por tu pedido en URBANEX! Tu ropa personalizada está siendo procesada en Sevilla.');
+            state.cart = [];
+            updateCartBadge();
+            renderCart();
+            switchTab('home');
+        }
+
+        /* ============================================================= */
+        /* SHOP CATALOG RENDER & FILTERS                                 */
+        /* ============================================================= */
+        function renderShop(filter = 'all') {
+            const grid = document.getElementById('shop-grid');
+            if (!grid) return;
+
+            const filtered = filter === 'all' 
+                ? state.shopProducts 
+                : state.shopProducts.filter(p => p.category === filter);
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-brand-card border border-brand-border rounded-2xl overflow-hidden hover:border-gray-500 transition-all duration-300 flex flex-col group">
+                    <div class="relative aspect-[4/5] bg-brand-dark overflow-hidden">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 right-3 bg-black/80 backdrop-blur px-2.5 py-1 rounded-full text-[10px] font-bold uppercase text-white border border-brand-border">
+                            Manga Derecha
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
+                        <div>
+                            <h3 class="font-bold text-white text-base group-hover:text-gray-300 transition-colors">${p.name}</h3>
+                            <p class="text-xs text-brand-muted mt-1 leading-relaxed">${p.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-brand-border/50">
+                            <span class="text-lg font-black text-white">${p.price.toFixed(2)} €</span>
+                            <button onclick="addProductToCart(${p.id})" class="px-4 py-2 bg-white text-black text-xs font-bold rounded-xl hover:bg-gray-200 uppercase tracking-wider transition">
+                                Añadir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterShop(cat) {
+            renderShop(cat);
+            document.querySelectorAll('.shop-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-black');
+                btn.classList.add('bg-brand-card', 'text-brand-muted');
+            });
+            event.target.classList.add('bg-white', 'text-black');
+            event.target.classList.remove('bg-brand-card', 'text-brand-muted');
+        }
+
+        /* ============================================================= */
+        /* UTILITY HELPERS & FAQ LOGIC                                   */
+        /* ============================================================= */
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                ans.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showToast('Mensaje enviado con éxito');
+            e.target.reset();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
